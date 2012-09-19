@@ -53,8 +53,8 @@ function _logToConsole(shortMessage, opts) {
 function log(shortMessage, a, b) {
 	clearTimeout(udpSocketTimeout);
 	var opts = {};
-	if (typeof a == 'string'){
-		opts = b || {};
+	// if (typeof a == 'string'){
+		// opts = b || {};
 		opts.full_message=a;
 	} else if (typeof a == 'object') {
 		opts = a || {};
@@ -91,15 +91,16 @@ function log(shortMessage, a, b) {
 			return;
 		}
 
-		if (udpSocket == null){
+		// if (udpSocket == null){
 			udpSocket = dgram.createSocket("udp4");
-			udpSocket.on('error', function(){console.error("GOT ERROR");});
-		}
+			// udpSocket.on('error', function(){console.error("GOT ERROR");});
+		// }
 
-		clearTimeout(udpSocketTimeout);
+		// clearTimeout(udpSocketTimeout);
 		udpSocket.send(compressedMessage, 0, compressedMessage.length, GLOBAL.graylogPort, GLOBAL.graylogHost, function (err, byteCount) {
-			clearTimeout(udpSocketTimeout);
-			udpSocketTimeout = setTimeout(function(){udpSocket.close()},1000)
+			udpSocket.close()
+			// clearTimeout(udpSocketTimeout);
+			// udpSocketTimeout = setTimeout(function(){udpSocket.close()},1000)
 		});
 	});
 }
