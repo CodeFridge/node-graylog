@@ -3,7 +3,11 @@ var zlib = require('zlib'),
     util = require('util'),
     udpSocket = null,
     udpSocketState = false,
+    udpSocketTimeout = null;
+
     
+
+
 GLOBAL.LOG_EMERG=0;    // system is unusable
 GLOBAL.LOG_ALERT=1;    // action must be taken immediately
 GLOBAL.LOG_CRIT=2;     // critical conditions
@@ -13,7 +17,6 @@ GLOBAL.LOG_WARNING=4;  // warning conditions
 GLOBAL.LOG_NOTICE=5;   // normal, but significant, condition
 GLOBAL.LOG_INFO=6;     // informational message
 GLOBAL.LOG_DEBUG=7;    // debug-level message
-    udpSocketTimeout = null;
 
 GLOBAL.graylogHost = 'localhost';
 GLOBAL.graylogPort = 12201;
