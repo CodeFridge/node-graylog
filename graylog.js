@@ -1,7 +1,9 @@
 var zlib = require('zlib'),
     dgram = require('dgram'),
-    util = require('util');
-
+    util = require('util'),
+    udpSocket = null,
+    udpSocketTimeout = null;
+    
 GLOBAL.LOG_EMERG=0;    // system is unusable
 GLOBAL.LOG_ALERT=1;    // action must be taken immediately
 GLOBAL.LOG_CRIT=2;     // critical conditions
@@ -49,6 +51,7 @@ function _logToConsole(shortMessage, opts) {
 }
 
 function log(shortMessage, a, b) {
+	clearTimeout(udpSocketTimeout);
 	var opts = {};
 	if (typeof a == 'string'){
 		opts = b || {};
@@ -88,9 +91,14 @@ function log(shortMessage, a, b) {
 			return;
 		}
 
-		var graylog2Client = dgram.createSocket("udp4");
-		graylog2Client.send(compressedMessage, 0, compressedMessage.length, GLOBAL.graylogPort, GLOBAL.graylogHost, function (err, byteCount) {
-			graylog2Client.close();
+		if (udpSocket == null){
+			udpSocket = dgram.createSocket("udp4");
+		}
+
+		clearTimeout(udpSocketTimeout);
+		udpSocket.send(compressedMessage, 0, compressedMessage.length, GLOBAL.graylogPort, GLOBAL.graylogHost, function (err, byteCount) {
+			clearTimeout(udpSocketTimeout);
+			udpSocketTimeout = setTimeout(function(){udpSocket.close()},1000)
 		});
 	});
 }
