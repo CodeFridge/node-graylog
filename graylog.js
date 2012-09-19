@@ -118,5 +118,5 @@ function retrieveFileInfo(opts){
 
 }
 
-GLOBAL.log = log;
+module.exports.log = log;
 
