@@ -2,7 +2,7 @@ var zlib = require('zlib'),
     dgram = require('dgram'),
     util = require('util'),
     udpSocket = null,
-    udpSocketTimeout = null;
+    udpSocketState = false,
     
 GLOBAL.LOG_EMERG=0;    // system is unusable
 GLOBAL.LOG_ALERT=1;    // action must be taken immediately
@@ -13,6 +13,7 @@ GLOBAL.LOG_WARNING=4;  // warning conditions
 GLOBAL.LOG_NOTICE=5;   // normal, but significant, condition
 GLOBAL.LOG_INFO=6;     // informational message
 GLOBAL.LOG_DEBUG=7;    // debug-level message
+    udpSocketTimeout = null;
 
 GLOBAL.graylogHost = 'localhost';
 GLOBAL.graylogPort = 12201;
@@ -51,7 +52,7 @@ function _logToConsole(shortMessage, opts) {
 }
 
 function log(shortMessage, a, b) {
-	// clearTimeout(udpSocketTimeout);
+	clearTimeout(udpSocketTimeout);
 	var opts = {};
 	if (typeof a == 'string'){
 		opts = b || {};
@@ -91,16 +92,15 @@ function log(shortMessage, a, b) {
 			return;
 		}
 
-		// if (udpSocket == null){
+		if (udpSocketState == false){
 			udpSocket = dgram.createSocket("udp4");
-			// udpSocket.on('error', function(){console.error("GOT ERROR");
-		// }
+			udpSocketState = true;
+		}
 
-		// clearTimeout(udpSocketTimeout);
+		clearTimeout(udpSocketTimeout);
 		udpSocket.send(compressedMessage, 0, compressedMessage.length, GLOBAL.graylogPort, GLOBAL.graylogHost, function (err, byteCount) {
-			udpSocket.close();
-			// clearTimeout(udpSocketTimeout);
-			// udpSocketTimeout = setTimeout(function(){udpSocket.close()},1000)
+			clearTimeout(udpSocketTimeout);
+			udpSocketTimeout = setTimeout(function(){udpSocketState=false; udpSocket.close()},1000)
 		});
 	});
 }
