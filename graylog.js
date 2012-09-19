@@ -93,6 +93,7 @@ function log(shortMessage, a, b) {
 
 		if (udpSocket == null){
 			udpSocket = dgram.createSocket("udp4");
+			udpSocket.on('error', function(){console.error("GOT ERROR");});
 		}
 
 		clearTimeout(udpSocketTimeout);
