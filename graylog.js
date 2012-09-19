@@ -98,7 +98,7 @@ function log(shortMessage, a, b) {
 
 		// clearTimeout(udpSocketTimeout);
 		udpSocket.send(compressedMessage, 0, compressedMessage.length, GLOBAL.graylogPort, GLOBAL.graylogHost, function (err, byteCount) {
-			udpSocket.close()
+			udpSocket.close();
 			// clearTimeout(udpSocketTimeout);
 			// udpSocketTimeout = setTimeout(function(){udpSocket.close()},1000)
 		});
