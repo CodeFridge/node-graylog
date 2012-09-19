@@ -51,10 +51,10 @@ function _logToConsole(shortMessage, opts) {
 }
 
 function log(shortMessage, a, b) {
-	clearTimeout(udpSocketTimeout);
+	// clearTimeout(udpSocketTimeout);
 	var opts = {};
-	// if (typeof a == 'string'){
-		// opts = b || {};
+	if (typeof a == 'string'){
+		opts = b || {};
 		opts.full_message=a;
 	} else if (typeof a == 'object') {
 		opts = a || {};
@@ -93,7 +93,7 @@ function log(shortMessage, a, b) {
 
 		// if (udpSocket == null){
 			udpSocket = dgram.createSocket("udp4");
-			// udpSocket.on('error', function(){console.error("GOT ERROR");});
+			// udpSocket.on('error', function(){console.error("GOT ERROR");
 		// }
 
 		// clearTimeout(udpSocketTimeout);
