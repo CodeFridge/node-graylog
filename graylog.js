@@ -65,7 +65,7 @@ function log(shortMessage, a, b) {
 	}
 
 	opts.version="1.0";
-	opts.timestamp = opts.timestamp || Date.now();
+	opts.timestamp = opts.timestamp || Date.now() / 1000 >> 0;
 	opts.host = opts.host || GLOBAL.graylogHostname;
 	opts.level = opts.level || GLOBAL.LOG_INFO;
 	opts.facility = opts.facility || GLOBAL.graylogFacility;
